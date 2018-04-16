@@ -2,9 +2,11 @@ package main
 
 import (
   "database/sql"
+  //create own handler package
+  "go-echo-vue/handlers"
   //"net/http"
   "github.com/labstack/echo"
-  _"github.com/mattn/go-sqlite3"
+  _ "github.com/mattn/go-sqlite3"
 )
 
 
@@ -16,9 +18,13 @@ func main(){
   //A new instance of Echo
   e := echo.New()
 
-  e.GET("/tasks", func(c echo.Context) error { return c.JSON(200, "GET Tasks") })
-  e.PUT("/tasks", func(c echo.Context) error { return c.JSON(200, "PUT Tasks") })
-  e.DELETE("/tasks/:id", func(c echo.Context) error {return c.JSON(200, "DELETE Task " + c.Param("id"))})
+  e.File("/", "public/index.html")
+  //e.GET("/tasks", func(c echo.Context) error { return c.JSON(200, "GET Tasks") })
+  e.GET("/tasks", handlers.GetTasks(db))
+  //e.PUT("/tasks", func(c echo.Context) error { return c.JSON(200, "PUT Tasks") })
+  e.PUT("/tasks", handlers.PutTask(db))
+  //e.DELETE("/tasks/:id", func(c echo.Context) error {return c.JSON(200, "DELETE Task " + c.Param("id"))})
+  e.DELETE("/tasks/:id",handlers.DeleteTask(db))
 
   //Start web server
 

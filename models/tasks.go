@@ -54,3 +54,28 @@ func GetTasks(db *sql.DB) TaskCollection {
   }
   return result
 }
+
+//PutTask inserts a new task into the database and returns either the new id on success or a panic on failure
+
+func PutTask(db *sql.DB, name string) (int64, error) {
+  sql := "INSERT INTO tasks(name) VALUES(?)"
+
+  //Create a prepared SQL statement
+  stmt, err := db.Prepare(sql)
+  //Exit on error
+  if err != nil {
+    panic(err)
+  }
+
+  //Cleanup after program exits
+  defer stmt.Close()
+
+  //Replace '?' in SQL statement with 'name'
+  result, err2 := stmt.Exec(name)
+  //Exit on error
+  if err2 != nil {
+    panic(err2)
+  }
+
+  return result.LastInsertId()
+}

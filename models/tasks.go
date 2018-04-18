@@ -72,6 +72,7 @@ func PutTask(db *sql.DB, name string) (int64, error) {
   defer stmt.Close()
 
   //Replace '?' in SQL statement with 'name'
+  //Exec executes a prepared statement with the given arguments and returns a Result summarizing the effect of the statement.
   result, err2 := stmt.Exec(name)
   //Exit on error
   if err2 != nil {

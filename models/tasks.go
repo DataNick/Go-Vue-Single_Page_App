@@ -30,7 +30,8 @@ type TaskCollection struct {
 }
 
 //GetTasks selects all tasks from the database, places them in a new collection, and returns them
-
+//Prepared SQL statements can be compiled and cached so execution is faster
+//Also, prepared SQL statements prevent against SQL injection attacks
 func GetTasks(db *sql.DB) TaskCollection {
   sql := "SELECT * FROM tasks"
   row, err := db.Query(sql)
@@ -78,4 +79,24 @@ func PutTask(db *sql.DB, name string) (int64, error) {
   }
 
   return result.LastInsertId()
+}
+
+func DeleteTask(db *sql.DB, id int) (int64, error) {
+  sql := "DELETE FROM tasks WHERE id = ?"
+
+  //Create prepared SQL statement
+  stmt, err := db.Prepare(sql)
+
+  if err != nil {
+    panic(err)
+  }
+
+  //Replace '?' in prepared SQL statement with 'id'
+  result, err2 := stmt.Exec(id)
+
+  if err2 != nil {
+    panic(err2)
+  }
+
+  return result.RowsAffected()
 }

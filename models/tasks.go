@@ -34,7 +34,7 @@ type TaskCollection struct {
 //Also, prepared SQL statements prevent against SQL injection attacks
 func GetTasks(db *sql.DB) TaskCollection {
   sql := "SELECT * FROM tasks"
-  row, err := db.Query(sql)
+  rows, err := db.Query(sql)
   //Exit if SQL doesn't work
   if err != nil {
     panic(err)

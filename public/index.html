@@ -51,8 +51,9 @@
         tasks: [],
         newTask: {}
       },
-
+      // This is run whenever the page is loaded to make sure we have a current task list
       created: function() {
+        //$http client (from vue-resource) fetches data from the /tasks route
         this.$http.get('/tasks').then(function(response) {
           this.tasks = response.data.items ? response.data.items : []
         })
@@ -69,7 +70,8 @@
             this.newTask.id = response.created
             this.tasks.push(this.newTask)
             console.log("Task created!")
-            console.log(this.newTask)
+            // console.log(this.newTask)
+            console.log(response)
             this.newTask = {}
           }).error(function(error) {
             console.log(error)

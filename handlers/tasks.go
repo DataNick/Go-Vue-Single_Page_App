@@ -34,6 +34,8 @@ func PutTask(db *sql.DB) echo.HandlerFunc {
     var task models.Task
     //Map incoming JSON body to the new task
     c.Bind(&task)
+    //c.Bind takes a JSON formatted body sent in a PUT request and maps it to a Task struct.
+    //The Task struct will be defined in our models package.
     //Add task using model
     id, err := models.PutTask(db, task.Name)
     //Return JSON response if successfull creation of task
